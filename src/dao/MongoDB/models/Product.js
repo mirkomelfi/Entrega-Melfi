@@ -2,7 +2,7 @@ import { ManagerMongoDB } from "../../../db/ManagerMongoDB.js";
 import { Schema,model } from "mongoose";
 import { paginate } from "mongoose-paginate-v2";
 
-const url = "mongodb+srv://admin:coderhouse@cluster0.gis7zph.mongodb.net/?retryWrites=true&w=majority" //  process.env.URLMONGODB
+const url = process.env.URLMONGODB
 
 const productSchema = new Schema({
     nombre: String,
@@ -10,7 +10,7 @@ const productSchema = new Schema({
     precio: Number
 })
 
-//productSchema.plugin(paginate)
+productSchema.plugin(paginate) // esto me trae error en el index. esta implementado nomas en managermongodb
 
 export class ManagerProductMongoDB extends ManagerMongoDB {
     constructor() {

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { paginate } from "mongoose-paginate-v2";
 
 export class ManagerMongoDB{
     //#url
@@ -7,6 +8,7 @@ export class ManagerMongoDB{
         this.url=url // por ahora lo deje public xq tengo q ver como hacerlo protected
         this.collection=collection
         this.schema=new mongoose.Schema(schema)
+        //this.schema.plugin(paginate)
         this.model=mongoose.model(this.collection,this.schema)
     }
 /*
@@ -40,11 +42,26 @@ export class ManagerMongoDB{
         }
     }
 
-    async getElements(){
+    async getElements(params){
         //this.#setConnection()
         this.setConnection()
         try{
-            return await this.model.find()
+            let {limit,page,sort,query}=params
+            if (sort==="1"||sort==="-1"){
+                sort=parseInt(sort)
+                const r1= this.model.aggregate([
+                {
+                    $sort:{precio:sort}   
+                }
+                ])
+                
+                //const r2= r1.paginate({}) // no me devuelve nada
+                //console.log(r2) / no me devuelve nada
+                return await r1
+                
+            }else{
+                return await this.model.find()
+            }
         }catch(error){
             return error
         }

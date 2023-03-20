@@ -7,6 +7,7 @@ import { engine } from 'express-handlebars';
 import * as path from 'path'
 import routerMessage from "./routes/messages.routes.js";
 import routerProduct from "./routes/products.routes.js";
+import routerCart from "./routes/cart.routes.js";
 
 
 const app = express()
@@ -43,7 +44,7 @@ io.on("connection", async (socket) => {
 app.use('/', express.static(__dirname + '/public'))
 
 app.use("/messages", routerMessage)
-
+app.use("/carts", routerCart)
 app.use("/products", routerProduct)
 
 
