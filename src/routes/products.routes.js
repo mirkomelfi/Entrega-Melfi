@@ -1,6 +1,8 @@
 import { Router } from "express";
+import { ManagerProductMongoDB } from "../dao/MongoDB/models/Product.js";
 
 const routerProduct=Router()
+const productManager= new ManagerProductMongoDB()
 
 routerProduct.get("/", async (req,res)=> {
     try{
@@ -10,7 +12,7 @@ routerProduct.get("/", async (req,res)=> {
         let {query}=req.query
         if (sort==="1"||sort==="-1"){
             sort=parseInt(sort)
-            const prueba=await productModel.aggregate([
+            const prueba=await productManager.aggregate([
                 {
                     $sort:{precio:sort}   
                 }/*,
@@ -33,7 +35,7 @@ routerProduct.get("/", async (req,res)=> {
            // console.log(r2)
             res.send({rdo:"success",products:prueba})
         }else{
-            const products=await productModel.find()
+            const products=await productManager.getElements()
             res.send({rdo:"success",products:products})
         }
     
