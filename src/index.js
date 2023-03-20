@@ -2,17 +2,28 @@ import "dotenv/config"
 import express from "express";
 import { Server } from "socket.io";
 import { getManagerMessages } from "./dao/daoManager.js";
+import { __dirname } from "./path.js";
+import { engine } from 'express-handlebars';
+import * as path from 'path'
+import routerMessage from "./routes/messages.routes.js";
+import routerProduct from "./routes/products.routes.js";
 
 const app = express()
-
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
 
 app.set("port", process.env.PORT || 5000)
 
 const server = app.listen(app.get("port"), () => console.log(`Server on port ${app.get("port")}`))
 
+
+app.use(express.json()) 
+app.use(express.urlencoded({extended: true}))
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set('views', path.resolve(__dirname, './views')); //__dirname + './views'
+
+
 const io = new Server(server)
+
 
 io.on("connection", async (socket) => {
     socket.on("message", async (info) => {
@@ -26,3 +37,11 @@ io.on("connection", async (socket) => {
         })
     })
 })
+
+
+app.use('/', express.static(__dirname + '/public'))
+
+app.use("/messages", routerMessage)
+
+app.use("/products", routerProduct)
+

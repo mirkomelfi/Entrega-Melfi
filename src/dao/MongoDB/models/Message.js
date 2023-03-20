@@ -3,6 +3,8 @@ import { Schema } from "mongoose";
 
 const url = process.env.URLMONGODB
 
+//const messageCollection="messages"
+
 const messageSchema = new Schema({
     nombre: String,
     email: {
@@ -11,6 +13,9 @@ const messageSchema = new Schema({
     },
     message: String
 })
+
+//export const messageModel=model(messageCollection,messageSchema)
+
 export class ManagerMessageMongoDB extends ManagerMongoDB {
     constructor() {
         super(url, "messages", messageSchema)
@@ -18,3 +23,4 @@ export class ManagerMessageMongoDB extends ManagerMongoDB {
     }
     //Aqui irian los metodos propios de la clase
 }
+
