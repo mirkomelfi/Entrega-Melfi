@@ -3,7 +3,7 @@ import { ManagerMessageMongoDB } from "../dao/MongoDB/models/Message.js";
 
 const routerMessage = Router()
 const messageManager= new ManagerMessageMongoDB()
-
+/*
 routerMessage.get('/', async (req, res) => { 
     const messages = await messageManager.getElements()
     console.log(messages)
@@ -30,5 +30,5 @@ routerMessage.put('/:id', async (req, res) => {
     let mensaje = await messageManager.updateElement(req.params.id, req.body)
     res.send(mensaje)
 })
-
+*/
 export default routerMessage

@@ -2,9 +2,7 @@ import { ManagerMongoDB } from "../../../db/ManagerMongoDB.js";
 import { Schema,model } from "mongoose";
 import { paginate } from "mongoose-paginate-v2";
 
-const url = process.env.URLMONGODB
-
-//const productCollection="products"
+const url = "mongodb+srv://admin:coderhouse@cluster0.gis7zph.mongodb.net/?retryWrites=true&w=majority" //  process.env.URLMONGODB
 
 const productSchema = new Schema({
     nombre: String,
@@ -21,5 +19,3 @@ export class ManagerProductMongoDB extends ManagerMongoDB {
     }
     //Aqui irian los metodos propios de la clase
 }
-
-//export const productModel=model(productCollection,productSchema)

@@ -1,16 +1,11 @@
 import { ManagerMongoDB } from "../../../db/ManagerMongoDB.js";
 import { Schema } from "mongoose";
 
-const url = process.env.URLMONGODB
-
-//const cartCollection="carts"
+const url = "mongodb+srv://admin:coderhouse@cluster0.gis7zph.mongodb.net/?retryWrites=true&w=majority" //  process.env.URLMONGODB
 
 const cartSchema = new Schema({
     products:[], //creo
 })
-
-//export const cartModel=model(cartCollection,cartSchema)
-
 
 export class ManagerProductMongoDB extends ManagerMongoDB {
     constructor() {

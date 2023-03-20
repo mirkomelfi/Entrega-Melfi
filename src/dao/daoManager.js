@@ -1,4 +1,4 @@
-const eleccionBDD=process.env.DBSELECTION
+const eleccionBDD=1//process.env.DBSELECTION
 
 export const getManagerMessages=async()=>{
     const modeloMensaje=eleccionBDD===1 ? await import("./MongoDB/models/Message.js") : await import("./PostgresSQL/models/Message.js")

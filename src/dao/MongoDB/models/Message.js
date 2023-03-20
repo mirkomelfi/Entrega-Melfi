@@ -1,9 +1,7 @@
 import { ManagerMongoDB } from "../../../db/ManagerMongoDB.js";
 import { Schema } from "mongoose";
 
-const url = process.env.URLMONGODB
-
-//const messageCollection="messages"
+const url = "mongodb+srv://admin:coderhouse@cluster0.gis7zph.mongodb.net/?retryWrites=true&w=majority" //  process.env.URLMONGODB
 
 const messageSchema = new Schema({
     nombre: String,
@@ -13,8 +11,6 @@ const messageSchema = new Schema({
     },
     message: String
 })
-
-//export const messageModel=model(messageCollection,messageSchema)
 
 export class ManagerMessageMongoDB extends ManagerMongoDB {
     constructor() {
