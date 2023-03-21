@@ -26,31 +26,50 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
             return error
         }
     }
-    async addProductToCart(carts,idCart,idProd){
-        console.log(carts)
-        if (carts.some(cart=>cart.id===idCart)){
-            let index= carts.findIndex((cart)=>cart.id===idCart) 
-            let arrayProductos= carts[index].products
-            console.log(arrayProductos)
-            if (arrayProductos.some(prod=>prod._id===idProd)){
-                const producto= arrayProductos.find(prod=>prod.product===idProd)
-                producto.quantity++
-            }else{
-                let product={
-                    product: idProd,
-                    quantity:1
-                }
-                carts[index].products.push(product)
-            }
-            carts.forEach(cart => {
-                if (cart.id===idCart){
-                    const cartUpdated=cart
-                }
-            return cartUpdated
-            });
+
+    async addProductCart(cart,idProduct){
+        const arrayProductos= cart.products
+        if (arrayProductos.some(producto=>producto.product==idProduct)){
+            const productWanted= arrayProductos.find(prod=>prod.product===idProduct)
+            productWanted.quantity++
         }else{
-            return -1
+            arrayProductos.push({product:idProduct,quantity:1})
         }
+        cart.products=arrayProductos
+        return cart
     }
+
+    async addProductsCart(cart,newArrayProducts){
+        cart.products=newArrayProducts
+        return cart
+    }
+
+    async deleteProductCart(cart,idProduct){
+        const arrayProductos= cart.products
+        if (arrayProductos.some(producto=>producto.product==idProduct)){
+            const arrayUpdated=arrayProductos.filter(producto=>producto.product!==idProduct)
+            cart.products=arrayUpdated
+            return cart
+        }
+        return -1
+    }
+
+    async updateProductCart(cart,idProduct,newQuantity){
+        const arrayProductos= cart.products
+        if (arrayProductos.some(producto=>producto.product==idProduct)){
+            const productWanted= arrayProductos.find(prod=>prod.product===idProduct)
+            productWanted.quantity=newQuantity
+            cart.products=arrayProductos
+            return cart
+        }
+        return -1
+    }
+
+    async deleteElementsCart(cart){
+        cart.products=[]
+        return cart
+    }
+
+
 }
 

@@ -44,12 +44,21 @@ export class ManagerMongoDB{
         //this.#setConnection()
         this.setConnection()
         try{
-            let {limit,page,sort,category}=params // que seria query?
-            if (sort==="1"||sort==="-1"){
-                return await this.model.paginate({},{sort:{precio:parseInt(sort)},limit:limit||10,page:page||1})
+            let {limit,page,sort,category}=params
+            if (category){
+                if (sort==="1"||sort==="-1"){
+                    return await this.model.paginate({category},{sort:{price:parseInt(sort)},limit:limit||10,page:page||1})
+                }else{
+                    return await this.model.paginate({category},{limit:limit||10,page:page||1})
+                }
             }else{
-                return await this.model.paginate({},{limit:limit||10,page:page||1})
+                if (sort==="1"||sort==="-1"){
+                    return await this.model.paginate({},{sort:{price:parseInt(sort)},limit:limit||10,page:page||1})
+                }else{
+                    return await this.model.paginate({},{limit:limit||10,page:page||1})
+                }
             }
+            
         }catch(error){
             return error
         }

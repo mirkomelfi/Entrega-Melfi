@@ -43,8 +43,8 @@ io.on("connection", async (socket) => {
 
 app.use('/', express.static(__dirname + '/public'))
 
-app.use("/messages", routerMessage)
-app.use("/carts", routerCart)
-app.use("/products", routerProduct)
+app.use("/api/messages", routerMessage)
+app.use("/api/carts", routerCart)
+app.use("/api/products", routerProduct)
 
 
