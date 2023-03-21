@@ -1,6 +1,6 @@
 import { ManagerMongoDB } from "../../../db/ManagerMongoDB.js";
 import { Schema,model } from "mongoose";
-import { paginate } from "mongoose-paginate-v2";
+import paginate  from "mongoose-paginate-v2";
 
 const url = process.env.URLMONGODB
 
@@ -10,7 +10,7 @@ const productSchema = new Schema({
     precio: Number
 })
 
-productSchema.plugin(paginate) // esto me trae error en el index. esta implementado nomas en managermongodb
+productSchema.plugin(paginate) 
 
 export class ManagerProductMongoDB extends ManagerMongoDB {
     constructor() {

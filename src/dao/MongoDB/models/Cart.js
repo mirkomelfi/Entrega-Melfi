@@ -4,20 +4,35 @@ import { Schema } from "mongoose";
 const url = process.env.URLMONGODB
 
 const cartSchema = new Schema({
-    products:[], // no se si esto va abajo o en el constructor
+    cartNumber:{
+        type: Number,
+        unique: true
+    } ,
+    products: Array
 })
 
 export class ManagerCartMongoDB extends ManagerMongoDB {
     constructor() {
         super(url, "carts", cartSchema)
-        this.cart=[] // o aca
+        
         //Aqui irian los atributos propios de la clase
     }
-    addElementToCart(carts,idCart,idProd){
+     
+    async getCarts (){
+        this.setConnection()
+        try{
+            return await this.model.find()
+        }catch(error){
+            return error
+        }
+    }
+    async addProductToCart(carts,idCart,idProd){
+        console.log(carts)
         if (carts.some(cart=>cart.id===idCart)){
-            let index= aux.findIndex((cart)=>cart.id===idCart) 
+            let index= carts.findIndex((cart)=>cart.id===idCart) 
             let arrayProductos= carts[index].products
-            if (arrayProductos.some(prod=>prod.product===idProd)){
+            console.log(arrayProductos)
+            if (arrayProductos.some(prod=>prod._id===idProd)){
                 const producto= arrayProductos.find(prod=>prod.product===idProd)
                 producto.quantity++
             }else{
@@ -27,11 +42,14 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
                 }
                 carts[index].products.push(product)
             }
-
-            //fs.writeFileSync(this.path,JSON.stringify(aux))
-            return "Producto añadido al carrito"
+            carts.forEach(cart => {
+                if (cart.id===idCart){
+                    const cartUpdated=cart
+                }
+            return cartUpdated
+            });
         }else{
-            return "Carrito no existe"
+            return -1
         }
     }
 }
