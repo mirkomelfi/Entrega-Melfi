@@ -7,27 +7,30 @@ const productManager= new ManagerProductMongoDB()
 
 routerProduct.get('/', async (req, res) => { 
     const products = await productManager.getElements(req.query)
-    res.send({rdo:"success",products:products})
+    res.json({rdo:"success",products:products})
+
 })
+
 
 routerProduct.get('/:id', async (req, res) => { 
     const product = await productManager.getElementById(req.params.id)
-    res.send({rdo:"success",product:product})
+    res.json({rdo:"success",product:product})
+
 })
 
 routerProduct.post('/', async (req, res) => { 
     let mensaje = await productManager.addElements([req.body])
-    res.send(mensaje)
+    res.json(mensaje)
 })
   
 routerProduct.delete('/:id', async (req, res) => {
     let mensaje = await productManager.deleteElement(req.params.id) 
-    res.send(mensaje)
+    res.json(mensaje)
 })
   
 routerProduct.put('/:id', async (req, res) => { 
     let mensaje = await productManager.updateElement(req.params.id, req.body)
-    res.send(mensaje)
+    res.json(mensaje)
 })
 
 
