@@ -40,25 +40,11 @@ export class ManagerMongoDB{
         }
     }
 
-    async getElements(params){
+    async getElements(){
         //this.#setConnection()
         this.setConnection()
         try{
-            let {limit,page,sort,category}=params
-            if (category){
-                if (sort==="1"||sort==="-1"){
-                    return await this.model.paginate({category},{sort:{price:parseInt(sort)},limit:limit||10,page:page||1})
-                }else{
-                    return await this.model.paginate({category},{limit:limit||10,page:page||1})
-                }
-            }else{
-                if (sort==="1"||sort==="-1"){
-                    return await this.model.paginate({},{sort:{price:parseInt(sort)},limit:limit||10,page:page||1})
-                }else{
-                    return await this.model.paginate({},{limit:limit||10,page:page||1})
-                }
-            }
-            
+            return await this.model.find()
         }catch(error){
             return error
         }

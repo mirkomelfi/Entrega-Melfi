@@ -8,6 +8,14 @@ const cartSchema = new Schema({
         type: Number,
         unique: true
     } ,
+    /*
+    products: [{
+        product: {
+            type: Schema.Types.ObjectId,
+            ref: 'products'   // entonces el populate sera products x la ref, .product por el nombre del atributo
+        },
+    }],
+    */
     products: Array
 })
 
@@ -19,7 +27,7 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
     }
      
     async getCarts (){
-        this.setConnection()
+        super.setConnection()
         try{
             return await this.model.find()
         }catch(error){
@@ -27,10 +35,22 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
         }
     }
 
-    async addProductCart(cart,idProduct){
+    async getCartById (id){
+        super.setConnection()
+        try{
+            return await this.model.findById(id).populate("products.product")
+        }catch(error){
+            return error
+        }
+    }
+
+    //async addProductCart(idCart,idProduct,cant){
+    async addProductCart(idCart,idProduct){
+        const cart= await this.model.findById(idCart)
         const arrayProductos= cart.products
         if (arrayProductos.some(producto=>producto.product==idProduct)){
             const productWanted= arrayProductos.find(prod=>prod.product===idProduct)
+            //productWanted.quantity+cant
             productWanted.quantity++
         }else{
             arrayProductos.push({product:idProduct,quantity:1})
@@ -39,12 +59,19 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
         return cart
     }
 
-    async addProductsCart(cart,newArrayProducts){
-        cart.products=newArrayProducts
-        return cart
+    async addProductsCart(idCart,newArrayProducts){
+        const cart= await this.model.findById(idCart)
+        if(cart){
+            cart.products=newArrayProducts
+            return cart
+        }
+        return -1
+
     }
 
-    async deleteProductCart(cart,idProduct){
+    async deleteProductCart(idCart,idProduct){
+        //agregar logica si no existe el cart ingresado
+        const cart= await this.model.findById(idCart)
         const arrayProductos= cart.products
         if (arrayProductos.some(producto=>producto.product==idProduct)){
             const arrayUpdated=arrayProductos.filter(producto=>producto.product!==idProduct)
@@ -54,7 +81,8 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
         return -1
     }
 
-    async updateProductCart(cart,idProduct,newQuantity){
+    async updateProductCart(idCart,idProduct,newQuantity){
+        const cart= await this.model.findById(idCart)
         const arrayProductos= cart.products
         if (arrayProductos.some(producto=>producto.product==idProduct)){
             const productWanted= arrayProductos.find(prod=>prod.product===idProduct)
@@ -65,9 +93,13 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
         return -1
     }
 
-    async deleteElementsCart(cart){
-        cart.products=[]
-        return cart
+    async deleteElementsCart(idCart){
+        const cart= await this.model.findById(idCart)
+        if(cart){
+            cart.products=[]
+            return cart
+        }
+        return -1
     }
 
 

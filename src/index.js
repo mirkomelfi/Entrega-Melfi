@@ -1,13 +1,11 @@
 import "dotenv/config"
 import express from "express";
 import { Server } from "socket.io";
-import { getManagerMessages,getManagerProducts,getManagerCarts } from "./dao/daoManager.js";
+import { getManagerMessages } from "./dao/daoManager.js";
 import { __dirname } from "./path.js";
 import { engine } from 'express-handlebars';
 import * as path from 'path'
-import routerMessage from "./routes/messages.routes.js";
-import routerProduct from "./routes/products.routes.js";
-import routerCart from "./routes/cart.routes.js";
+import router from "./routes/index.routes.js";
 
 
 const app = express()
@@ -43,7 +41,6 @@ io.on("connection", async (socket) => {
 
 app.use('/', express.static(__dirname + '/public'))
 
-app.use("/api/messages", routerMessage)
-app.use("/api/carts", routerCart)
-app.use("/api/products", routerProduct)
+app.use("/", router)
+
 
