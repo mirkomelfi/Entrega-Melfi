@@ -12,12 +12,11 @@ const cartSchema = new Schema({
     products: [{
         product: {
             type: Schema.Types.ObjectId,
-            ref: 'products'   // entonces el populate sera products x la ref, .product por el nombre del atributo
+            ref: 'products'   
         },
         quantity: Number
     }],
     
-    //products: Array
 })
 
 export class ManagerCartMongoDB extends ManagerMongoDB {
@@ -54,7 +53,7 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
             const productWanted= arrayProductos.find(prod=>prod.product==idProduct)
             productWanted.quantity=productWanted.quantity+parseInt(quantity)
         }else{
-            arrayProductos.push({product:idProduct,quantity:1})
+            arrayProductos.push({product:idProduct,quantity:quantity})
         }
 
         cart.products=arrayProductos
@@ -104,7 +103,6 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
         }
         return -1
     }
-
 
 }
 

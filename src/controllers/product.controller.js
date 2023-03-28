@@ -38,9 +38,9 @@ export const getProductById = async (req, res) => {
 
 
 export const addProduct = async (req, res) => {
-    const { name, category, stock, price  } = req.body
+    const {title,description,code,price,status,stock,category,thumbnails } = req.body
     try {
-        const product = await productManager.addElements([{ name, category, stock, price}])
+        const product = await productManager.addElements([{title,description,code,price,status,stock,category,thumbnails}])
         res.status(204).json(product)
     } catch (error) {
         res.status(500).json({
@@ -52,9 +52,9 @@ export const addProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
     const { id } = req.params
-    const {  name, category, stock, price } = req.body
+    const { title,description,code,price,status,stock,category,thumbnails } = req.body
     try {
-        const product = await productManager.updateElement(id, {  name, category, stock, price })
+        const product = await productManager.updateElement(id, {title,description,code,price,status,stock,category,thumbnails})
 
         if (product) {
             return res.status(200).json({

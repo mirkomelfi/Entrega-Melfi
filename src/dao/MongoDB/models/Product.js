@@ -5,10 +5,38 @@ import paginate  from "mongoose-paginate-v2";
 const url = process.env.URLMONGODB
 
 const productSchema = new Schema({
-    name: String,
-    category:String,
-    stock:Number,
-    price: Number
+    title: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    code: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    price: {
+        type: Number,
+        required: true,
+        index: true
+    },
+    status: {
+        type: Boolean,
+        default: true
+    },
+    stock: {
+        type: Number,
+        required: true
+    },
+    category: {
+        type: String,
+        required: true,
+        index: true
+    },
+    thumbnails: []
 })
 
 productSchema.plugin(paginate) 
@@ -19,7 +47,6 @@ export class ManagerProductMongoDB extends ManagerMongoDB {
         //Aqui irian los atributos propios de la clase
     }
     async getProducts(params){
-        //this.#setConnection()
         super.setConnection()
         let {limit,page,sort,category}=params
         if (category){

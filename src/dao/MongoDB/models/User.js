@@ -46,5 +46,4 @@ export class ManagerUserMongoDB extends ManagerMongoDB {
         }
     }
 
-
 }
