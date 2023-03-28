@@ -19,7 +19,7 @@ export const testLogin = async (req, res) => {
     try {
         const user = await userManager.getElementByEmail(email)
 
-        if (email == user.email && validatePassword(password, user.password)) {
+        if (user &&  email == user.email && validatePassword(password, user.password)) {
             
             req.session.email = user.email
 

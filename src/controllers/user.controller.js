@@ -7,27 +7,31 @@ export const createUser = async (req, res) => {
     const { first_name, last_name, email, age, password } = req.body
 
     try {
-        const user = await userManager.getElementByEmail(email)
-        if (user) {
+        if (first_name&&last_name&&email&&age&&password){
+            const user = await userManager.getElementByEmail(email)
+            if (user) {
+                res.status(400).json({
+                    message: "Usuario ya existe"
+                })
+            } else {
+                const hashPassword = createHash(password)
+                const userCreated = await userManager.addElements([{
+                    first_name: first_name,
+                    last_name: last_name,
+                    email: email,
+                    age: age,
+                    password: hashPassword
+                }])
+                
+                res.status(200).json({
+                    message: { message: "Usuario creado", userCreated }
+                })
+            }
+        }else{    
             res.status(400).json({
-                message: "Usuario ya existe"
-            })
-        } else {
-            const hashPassword = createHash(password)
-            const userCreated = await userManager.addElements([{
-                first_name: first_name,
-                last_name: last_name,
-                email: email,
-                age: age,
-                password: hashPassword
-            }])
-
-            res.status(200).json({
-                message: { message: "Usuario creado", userCreated }
+                message: "Faltan datos requeridos del usuario" 
             })
         }
-
-
     } catch (error) {
         res.status(500).json({
             message: error.message
