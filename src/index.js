@@ -2,10 +2,12 @@ import "dotenv/config"
 import express from "express";
 import { Server } from "socket.io";
 import { getManagerMessages } from "./dao/daoManager.js";
+import session from 'express-session'
 import { __dirname } from "./path.js";
 import { engine } from 'express-handlebars';
 import * as path from 'path'
 import router from "./routes/index.routes.js";
+import MongoStore from "connect-mongo";
 
 
 const app = express()
@@ -17,6 +19,18 @@ const server = app.listen(app.get("port"), () => console.log(`Server on port ${a
 
 app.use(express.json()) 
 app.use(express.urlencoded({extended: true}))
+
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: process.env.URLMONGODB,
+        mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
+        ttl: 210
+    }),
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true
+}))
+
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 app.set('views', path.resolve(__dirname, './views')); //__dirname + './views'

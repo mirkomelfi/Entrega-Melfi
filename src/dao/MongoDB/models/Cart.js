@@ -8,15 +8,16 @@ const cartSchema = new Schema({
         type: Number,
         unique: true
     } ,
-    /*
+    
     products: [{
         product: {
             type: Schema.Types.ObjectId,
             ref: 'products'   // entonces el populate sera products x la ref, .product por el nombre del atributo
         },
+        quantity: Number
     }],
-    */
-    products: Array
+    
+    //products: Array
 })
 
 export class ManagerCartMongoDB extends ManagerMongoDB {
@@ -44,18 +45,20 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
         }
     }
 
-    //async addProductCart(idCart,idProduct,cant){
-    async addProductCart(idCart,idProduct){
+    async addProductCart(idCart,idProduct,quantity){
+        super.setConnection()
         const cart= await this.model.findById(idCart)
         const arrayProductos= cart.products
+
         if (arrayProductos.some(producto=>producto.product==idProduct)){
-            const productWanted= arrayProductos.find(prod=>prod.product===idProduct)
-            //productWanted.quantity+cant
-            productWanted.quantity++
+            const productWanted= arrayProductos.find(prod=>prod.product==idProduct)
+            productWanted.quantity=productWanted.quantity+parseInt(quantity)
         }else{
             arrayProductos.push({product:idProduct,quantity:1})
         }
+
         cart.products=arrayProductos
+
         return cart
     }
 

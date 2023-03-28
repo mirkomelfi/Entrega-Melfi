@@ -46,7 +46,9 @@ export const getCartById = async (req, res) => {
 export const addCart = async (req, res) => {
     try {
         const cart=  await cartManager.addElements([req.body])
-        res.status(204).json(cart)
+        res.status(200).json({
+            message: "Carrito actualizado"
+        })
     } catch (error) {
         res.status(500).json({
             message: error.message
@@ -56,12 +58,14 @@ export const addCart = async (req, res) => {
 
 
 export const addProductCart = async (req, res) => {
-    //const {idProd, cant } = req.body
+    const {cid,pid}=req.params
+    const {quantity=1}=req.query
     try {
-        //const cart= await cartManager.addProductCart(req.params.cid, idProd, cant)
-        const cart= await cartManager.addProductCart(req.params.cid, req.params.pid)
-        const cartUpdated= await cartManager.updateElement(req.params.cid,cart)
-        res.status(204).json(cartUpdated)
+        const cart= await cartManager.addProductCart(cid, pid, quantity)
+        const cartUpdated= await cartManager.updateElement(cid,cart)
+        res.status(200).json({
+            message: "Carrito actualizado"
+        })
     } catch (error) {
         res.status(500).json({
             message: error.message
