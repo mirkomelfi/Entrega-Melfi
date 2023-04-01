@@ -3,7 +3,7 @@ import { destroySession, getSession, testLogin } from "../controllers/session.co
 
 const routerSession = Router()
 
-routerSession.post("/login", testLogin)
+routerSession.post("/login", passport.authenticate('login'), testLogin)
 routerSession.get("/logout", destroySession)
 
 export default routerSession
