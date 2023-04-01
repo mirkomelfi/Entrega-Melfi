@@ -9,7 +9,7 @@ const LocalStrategy = local.Strategy
 const initializePassport = () => {
 
     //Ruta a implementar
-    
+
     passport.use('register', new LocalStrategy(
         { passReqToCallback: true, usernameField: 'email' }, async (req, username, password, done) => {
         
@@ -68,7 +68,7 @@ const initializePassport = () => {
     }, async (accessToken, refreshToken, profile, done) => {
 
         try {
-            console.log(profile)
+            
             const user = await managerUser.getElementByEmail(profile._json.email)
 
             if (user) { 
@@ -94,7 +94,7 @@ const initializePassport = () => {
     //Iniciar la session del usuario
     passport.serializeUser((user, done) => {
         if (Array.isArray(user)) {
-            done(null, user[0]._id)
+            done(null, user[0]._id) //xq la primera vez lo toma como objeto, luego como array
         }
         done(null, user._id)
     })
