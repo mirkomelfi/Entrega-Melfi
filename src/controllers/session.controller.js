@@ -1,5 +1,3 @@
-import { userManager } from "./user.controller.js"
-import { validatePassword } from "../utils/bcrypt.js"
 
 export const getSession = (req, res) => {
     if (req.session.login) { //Si la sesion esta activa en la BDD
