@@ -74,10 +74,9 @@ const initializePassport = () => {
             if (user) { 
                 done(null, user)
             } else {
-                console.log("profile no me esta devolviendo nada en el name x eso me tira error xq name es required: ",profile._json.name)// AYUDA!
                 const passwordHash = createHash('coder123')
                 const userCreated = await userManager.addElements([{
-                    first_name: profile._json.name,
+                    first_name: profile._json.login,
                     last_name: ' ',
                     email: profile._json.email,
                     age: 18,
@@ -96,8 +95,9 @@ const initializePassport = () => {
     passport.serializeUser((user, done) => {
         if (Array.isArray(user)) {
             done(null, user[0]._id) //xq la primera vez lo toma como objeto, luego como array
+        }else{
+            done(null, user._id)
         }
-        done(null, user._id)
     })
 
     //Eliminar la sesion del usuario

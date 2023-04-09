@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { destroySession, getSession, testLogin } from "../controllers/session.controller.js";
+import { destroySession, testLogin } from "../controllers/session.controller.js";
 import passport from "passport";
 
 const routerSession = Router()
