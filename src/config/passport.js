@@ -1,14 +1,34 @@
 import local from 'passport-local'
 import passport from 'passport'
 import GitHubStrategy from 'passport-github2'
+import jwt from 'passport-jwt'
 import { userManager } from '../controllers/user.controller.js'
 import { createHash, validatePassword } from '../utils/bcrypt.js'
+import { authToken, generateToken } from '../utils/jwt.js'
+import { cartManager } from '../controllers/cart.controller.js'
 
 const LocalStrategy = local.Strategy 
+const JWTStrategy = jwt.Strategy 
+const ExtractJWT = jwt.ExtractJwt 
 
 const initializePassport = () => {
 
-    //Ruta a implementar
+    const cookieExtractor = (req) => {
+        const token = req.cookies ? req.cookies.jwtCookies : null
+        return token
+    }
+
+    passport.use('jwt', new JWTStrategy({
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]), //De donde extraigo mi token
+        secretOrKey: process.env.COOKIE_SECRET //Mismo valor que la firma de las cookies
+    }, async (jwt_payload, done) => {
+        try {
+            return done(null, jwt_payload)
+        } catch (error) {
+            return done(error)
+        }
+
+    }))
 
     passport.use('register', new LocalStrategy(
         { passReqToCallback: true, usernameField: 'email' }, async (req, username, password, done) => {
@@ -24,15 +44,19 @@ const initializePassport = () => {
 
                 const passwordHash = createHash(password)
 
+                const carrito = await cartManager.addElements()
                 const userCreated = await userManager.addElements([{
                     first_name: first_name,
                     last_name: last_name,
                     email: email,
                     age: age,
-                    password: passwordHash
+                    password: passwordHash,
+                    idCart: carrito[0]._id
                 }])
 
-                return done(null, userCreated) 
+                const token = generateToken(userCreated)
+                console.log(token)
+                return done(null, userCreated)
 
             } catch (error) {
                 return done(error)

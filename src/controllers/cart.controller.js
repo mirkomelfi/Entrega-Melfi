@@ -1,7 +1,7 @@
 import { getManagerCarts } from "../dao/daoManager.js";
 
 const data = await getManagerCarts()
-const cartManager = new data.ManagerCartMongoDB
+export const cartManager = new data.ManagerCartMongoDB
 
 
 export const getCarts = async (req, res) => {
@@ -41,21 +41,6 @@ export const getCartById = async (req, res) => {
         })
     }
 }
-
-
-export const addCart = async (req, res) => {
-    try {
-        const cart=  await cartManager.addElements([req.body])
-        res.status(200).json({
-            message: "Carrito actualizado"
-        })
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        })
-    }
-}
-
 
 export const addProductCart = async (req, res) => {
     const {cid,pid}=req.params
