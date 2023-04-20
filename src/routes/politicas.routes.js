@@ -1,6 +1,6 @@
 import Router from 'express'
 import passport from 'passport'
-import { passportError, roleVerification } from '../utils/errorMessages.js'
+import { passportError, roleVerification } from '../utils/errorMessage.js'
 
 const routerPoliticas = Router()
 
